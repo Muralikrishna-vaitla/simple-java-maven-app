@@ -1,4 +1,3 @@
-# This is the simple maven java jenkins file
 pipeline {
     agent any
     options {
