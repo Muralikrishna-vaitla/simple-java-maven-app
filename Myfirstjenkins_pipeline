@@ -1,0 +1,32 @@
+pipeline{
+    agent any
+        stages{
+            stage('Checkout') {
+                steps {
+                    git url: 'https://github.com/Muralikrishna-vaitla/simple-java-maven-app.git', branch: 'master'
+                }
+            }
+            stage('Build & Test') {
+                steps {
+                    sh 'mvn clean verify'
+            }
+        }
+            stage('SonarQube Analysis') {
+                steps {
+                    withSonarQubeEnv('MySonar') {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
+            }
+            stage('Package/Deploy') {
+                steps {
+                    sh 'mvn package'
+            }
+        }
+            stage('Checking the Jar') {
+                steps {
+                    sh 'java -jar target/my-app-1.0-SNAPSHOT.jar'
+                }
+            }
+        }
+}
